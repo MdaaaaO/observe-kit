@@ -10,6 +10,8 @@ Thanks for helping. The short version:
   PR description.
 - **`make ci` passes locally** before you push. It runs ruff, `mypy --strict`, pytest with branch
   coverage, and actionlint. You need [uv](https://docs.astral.sh/uv/). Run `make install` once.
+- An automated Claude review comments on each PR from this repo's branches. It is advisory; a
+  maintainer decides. Maintainers can ask it again after a fix push with `@claude review`.
 - New behaviour comes with a test, for sync and `async def` alike. `MemorySink` collects events,
   so most tests need nothing else.
 - The scope is the decorator. Integrations (a Prometheus sink, a Slack notifier) belong in your
