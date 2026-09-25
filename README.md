@@ -3,7 +3,9 @@
 [![PyPI](https://img.shields.io/pypi/v/observe-kit)](https://pypi.org/project/observe-kit/)
 [![Python](https://img.shields.io/pypi/pyversions/observe-kit)](https://pypi.org/project/observe-kit/)
 [![CI](https://github.com/MdaaaaO/observe-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/MdaaaaO/observe-kit/actions/workflows/ci.yml)
+[![Coverage](https://raw.githubusercontent.com/MdaaaaO/observe-kit/python-coverage-comment-action-data/badge.svg)](https://github.com/MdaaaaO/observe-kit/tree/python-coverage-comment-action-data)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)
 
 One decorator, `@observed`, that times a call, decides how it ended, writes a
 [structlog](https://www.structlog.org) line and emits an event to a sink you choose. It works on
