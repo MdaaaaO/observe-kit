@@ -2,17 +2,18 @@
 
 [Full report](https://htmlpreview.github.io/?https://github.com/MdaaaaO/observe-kit/blob/python-coverage-comment-action-data/htmlcov/index.html)
 
-| Name                             |    Stmts |     Miss |   Branch |   BrPart |   Cover |   Missing |
-|--------------------------------- | -------: | -------: | -------: | -------: | ------: | --------: |
-| src/observe\_kit/\_\_init\_\_.py |        8 |        0 |        0 |        0 |    100% |           |
-| src/observe\_kit/config.py       |       22 |        0 |        0 |        0 |    100% |           |
-| src/observe\_kit/decorator.py    |      117 |        0 |       22 |        1 |     99% | 204-\>209 |
-| src/observe\_kit/events.py       |       24 |        0 |        0 |        0 |    100% |           |
-| src/observe\_kit/policy.py       |       25 |        0 |        4 |        0 |    100% |           |
-| src/observe\_kit/provider.py     |       33 |        0 |        6 |        0 |    100% |           |
-| src/observe\_kit/sinks.py        |       20 |        0 |        0 |        0 |    100% |           |
-| src/observe\_kit/text.py         |        6 |        0 |        0 |        0 |    100% |           |
-| **TOTAL**                        |  **255** |    **0** |   **32** |    **1** | **99%** |           |
+| Name                               |    Stmts |     Miss |   Branch |   BrPart |   Cover |   Missing |
+|----------------------------------- | -------: | -------: | -------: | -------: | ------: | --------: |
+| src/observe\_kit/\_\_init\_\_.py   |        8 |        0 |        0 |        0 |    100% |           |
+| src/observe\_kit/config.py         |       22 |        0 |        0 |        0 |    100% |           |
+| src/observe\_kit/decorator.py      |      117 |        0 |       22 |        1 |     99% | 204-\>209 |
+| src/observe\_kit/events.py         |       24 |        0 |        0 |        0 |    100% |           |
+| src/observe\_kit/policy.py         |       25 |        0 |        4 |        0 |    100% |           |
+| src/observe\_kit/provider.py       |       33 |        0 |        6 |        0 |    100% |           |
+| src/observe\_kit/pytest\_plugin.py |       12 |        0 |        0 |        0 |    100% |           |
+| src/observe\_kit/sinks.py          |       27 |        0 |        2 |        0 |    100% |           |
+| src/observe\_kit/text.py           |        6 |        0 |        0 |        0 |    100% |           |
+| **TOTAL**                          |  **274** |    **0** |   **34** |    **1** | **99%** |           |
 
 
 ## Setup coverage badge
