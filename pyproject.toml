@@ -33,7 +33,7 @@ requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [dependency-groups]
-dev = ["pytest>=8", "pytest-cov>=5", "mypy>=1.11", "ruff>=0.6", "conventional-release>=0.1.2,<0.2"]
+dev = ["pytest>=8", "pytest-cov>=5", "mypy>=1.11", "ruff>=0.6", "conventional-release>=0.1.2,<1"]
 
 [tool.conventional-release]
 version-files = ["pyproject.toml"]

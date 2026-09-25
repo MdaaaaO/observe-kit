@@ -446,7 +446,7 @@ requires-dist = [{ name = "structlog", specifier = ">=24.1" }]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "conventional-release", specifier = ">=0.1.2,<0.2" },
+    { name = "conventional-release", specifier = ">=0.1.2,<1" },
     { name = "mypy", specifier = ">=1.11" },
     { name = "pytest", specifier = ">=8" },
     { name = "pytest-cov", specifier = ">=5" },
