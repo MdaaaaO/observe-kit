@@ -1,0 +1,18 @@
+name: Bug report
+description: observed did something it should not have
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: A minimal decorated function and how you called it, what you expected, what you got.
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      placeholder: observe-kit 0.1.0, structlog 25.1, Python 3.13
+    validations:
+      required: true

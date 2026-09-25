@@ -1,0 +1,11 @@
+observe-kit
+Copyright 2026 Georg Kasper
+
+This product is a rewrite of "observe" (https://github.com/atlassian-labs/observe),
+Copyright [2020] Atlassian Pty Ltd, licensed under the Apache License, Version 2.0.
+Georg Kasper was the author of that project.
+
+Changes from the original: new code base built around a single `observed` decorator with four
+explicit outcomes (finished, expected, swallowed, raised); structlog logging; pluggable event
+sinks and notifiers found on the decorated instance; async support; and a notification policy
+that keeps context fields, extra error lines and URLs out of alerts.
