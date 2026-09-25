@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 from collections.abc import Iterator
 
 import pytest
@@ -128,3 +129,38 @@ def test_restore_undoes_configure() -> None:
     restore(previous)
     assert defaults() == before
     assert Provider.notifier(()) is None
+
+
+@observed("mod.aboom", fields=("x",))
+async def aboom(x: int) -> None:
+    raise RuntimeError("down")
+
+
+class AsyncOwn:
+    def __init__(self) -> None:
+        self.sink = MemorySink()
+
+    @observed("own.aok")
+    async def aok(self) -> int:
+        return 1
+
+
+def test_async_uses_configured_sink_notifier_and_policy() -> None:
+    sink, notifier = MemorySink(), RecordingNotifier()
+    configure(sink=sink, notifier=notifier, notify_policy=LOUD)
+    with pytest.raises(RuntimeError):
+        asyncio.run(aboom(3))
+    [event] = sink.named("mod.aboom")
+    assert event.outcome is CallOutcome.RAISED
+    [(title, text)] = notifier.calls
+    assert title == "mod.aboom raised RuntimeError"
+    assert "x=3" in text
+
+
+def test_async_instance_beats_configured() -> None:
+    sink = MemorySink()
+    configure(sink=sink)
+    own = AsyncOwn()
+    assert asyncio.run(own.aok()) == 1
+    assert sink.events == []
+    assert [e.outcome for e in own.sink.events] == [CallOutcome.FINISHED]
