@@ -78,8 +78,8 @@ to a default when one is missing or has the wrong shape:
 | attribute | expected shape | fallback |
 |---|---|---|
 | `log` | a structlog logger (has `.bind`) | `structlog.get_logger(module)` |
-| `sink` | an `EventSink`: `emit(event)` | `NullSink`, which drops events |
-| `notifier` | a `Notifier`: `error(title, text)` | none; nobody is told |
+| `sink` | an `EventSink`: `emit(event)` | the `configure()`d sink, else `NullSink`, which drops events |
+| `notifier` | a `Notifier`: `error(title, text)` | the `configure()`d notifier, else none; nobody is told |
 | `observe_context` | a mapping, e.g. `{"run_id": 7}` | `{}` |
 
 `observe_context` is bound onto every log line and event from that instance. Plain functions get

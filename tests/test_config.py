@@ -164,3 +164,17 @@ def test_async_instance_beats_configured() -> None:
     assert asyncio.run(own.aok()) == 1
     assert sink.events == []
     assert [e.outcome for e in own.sink.events] == [CallOutcome.FINISHED]
+
+
+class EmptyLookingSink(MemorySink):
+    """A sink that is falsy, as one forwarding __len__ to an empty buffer would be."""
+
+    def __len__(self) -> int:
+        return 0
+
+
+def test_falsy_configured_sink_is_still_used() -> None:
+    sink = EmptyLookingSink()
+    configure(sink=sink)
+    ok()
+    assert len(sink.events) == 1

@@ -37,7 +37,8 @@ class Provider:
         sink = getattr(Provider._self(args), "sink", None)
         if sink is not None and callable(getattr(sink, "emit", None)):
             return sink  # type: ignore[no-any-return]
-        return defaults().sink or NullSink()
+        configured = defaults().sink
+        return configured if configured is not None else NullSink()
 
     @staticmethod
     def notifier(args: tuple[Any, ...]) -> Notifier | None:

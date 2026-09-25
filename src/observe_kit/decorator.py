@@ -218,7 +218,10 @@ class _Call:
 
 def _policy(spec: _Spec) -> NotifyPolicy:
     """The decorator's policy, else the configured one, else DEFAULT_POLICY; read per call."""
-    return spec.policy or defaults().notify_policy or DEFAULT_POLICY
+    if spec.policy is not None:
+        return spec.policy
+    configured = defaults().notify_policy
+    return configured if configured is not None else DEFAULT_POLICY
 
 
 def _bound(
