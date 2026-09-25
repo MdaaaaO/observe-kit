@@ -13,6 +13,7 @@ Every call emits `billing.charge.finished` (or `.expected`, `.swallowed`, `.rais
 `duration_ms` and `customer_id`, as a structlog line and as an `ObservedEvent` to the sink.
 """
 
+from .config import Defaults, configure, defaults, restore
 from .decorator import observed
 from .events import CallOutcome, ObservedEvent
 from .policy import DEFAULT_POLICY, NotifyPolicy
@@ -23,6 +24,7 @@ from .text import withhold_urls
 __all__ = [
     "DEFAULT_POLICY",
     "CallOutcome",
+    "Defaults",
     "EventSink",
     "MemorySink",
     "Notifier",
@@ -31,6 +33,9 @@ __all__ = [
     "NullSink",
     "ObservedEvent",
     "Provider",
+    "configure",
+    "defaults",
     "observed",
+    "restore",
     "withhold_urls",
 ]
