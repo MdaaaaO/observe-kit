@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
-from .events import ObservedEvent
+from .events import CallOutcome, ObservedEvent
 
 
 @runtime_checkable
@@ -55,3 +55,15 @@ class MemorySink:
     def named(self, name: str) -> list[ObservedEvent]:
         """The events of one decorated call, oldest first."""
         return [e for e in self.events if e.name == name]
+
+    def assert_one(self, name: str, outcome: CallOutcome | None = None) -> ObservedEvent:
+        """The only event of `name` (and `outcome`, if given); AssertionError otherwise.
+
+        The error lists every recorded event, so a failing test shows what did happen.
+        """
+        found = [e for e in self.named(name) if outcome is None or e.outcome is outcome]
+        if len(found) == 1:
+            return found[0]
+        want = name if outcome is None else f"{name}.{outcome}"
+        seen = "\n".join(f"  {e.event} {e.context}" for e in self.events) or "  (none)"
+        raise AssertionError(f"expected one {want} event, found {len(found)}; recorded:\n{seen}")

@@ -23,6 +23,9 @@ classifiers = [
   "Typing :: Typed",
 ]
 
+[project.entry-points.pytest11]
+observe_kit = "observe_kit.pytest_plugin"
+
 [project.urls]
 Homepage = "https://github.com/MdaaaaO/observe-kit"
 Changelog = "https://github.com/MdaaaaO/observe-kit/blob/main/CHANGELOG.md"
@@ -33,7 +36,7 @@ requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [dependency-groups]
-dev = ["pytest>=8", "pytest-cov>=5", "mypy>=1.11", "ruff>=0.6", "conventional-release>=0.1.2,<1"]
+dev = ["pytest>=8", "coverage>=7", "mypy>=1.11", "ruff>=0.6", "conventional-release>=0.1.2,<1"]
 
 [tool.conventional-release]
 version-files = ["pyproject.toml"]

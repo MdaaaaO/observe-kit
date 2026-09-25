@@ -127,23 +127,36 @@ class CountingSink:
         self.counter.labels(event.name, event.outcome).inc()
 ```
 
-## Testing with MemorySink
+## Testing
 
-`MemorySink` keeps every event in a list, so tests assert on what happened instead of parsing logs:
+Installing observe-kit registers a pytest plugin with one fixture, `observed_events`: a fresh
+`MemorySink` configured as the process-wide sink for the test, and removed afterwards. Tests assert
+on what happened instead of parsing logs:
 
 ```python
-from observe_kit import CallOutcome, MemorySink
+from observe_kit import CallOutcome
 
 
-def test_declined_card_is_expected():
+def test_declined_card_is_expected(observed_events):
+    with pytest.raises(CardDeclined):
+        charge("c_42", 500)
+
+    event = observed_events.assert_one("billing.charge", CallOutcome.EXPECTED)
+    assert event.context["customer_id"] == "c_42"
+```
+
+`assert_one(name, outcome=None)` returns the only matching event, or fails with every event that
+was recorded. `named(name)` returns them all, oldest first.
+
+The fixture catches calls that have no sink of their own. An instance with a `.sink` keeps using
+it; give it a `MemorySink` directly:
+
+```python
+def test_charge_on_billing():
     sink = MemorySink()
     billing = Billing(log=structlog.get_logger(), sink=sink, notifier=None)
-
-    with pytest.raises(CardDeclined):
-        billing.charge("c_42", 500)
-
-    [event] = sink.named("billing.charge")
-    assert event.outcome is CallOutcome.EXPECTED
+    billing.charge("c_42", 500)
+    sink.assert_one("billing.charge", CallOutcome.FINISHED)
 ```
 
 ## Notifications and NotifyPolicy
