@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import asyncio
+
 import pytest
 
 from observe_kit import CallOutcome, MemorySink, ObservedEvent, defaults, observed
@@ -67,3 +69,14 @@ def _event() -> ObservedEvent:
     return ObservedEvent(
         name="mod.work", outcome=CallOutcome.FINISHED, duration_ms=1, context={"x": 1}
     )
+
+
+@observed("mod.awork")
+async def awork() -> int:
+    await asyncio.sleep(0)
+    return 1
+
+
+def test_fixture_catches_async_calls(observed_events: MemorySink) -> None:
+    assert asyncio.run(awork()) == 1
+    assert observed_events.assert_one("mod.awork", CallOutcome.FINISHED).duration_ms >= 0
