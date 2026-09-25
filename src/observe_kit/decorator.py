@@ -8,6 +8,7 @@ from collections.abc import Awaitable, Callable, Mapping
 from functools import wraps
 from typing import Any, Literal, ParamSpec, TypeVar, cast
 
+from .binding import bound as _bound_fields
 from .config import defaults
 from .events import CallOutcome, ObservedEvent
 from .policy import DEFAULT_POLICY, NotifyPolicy
@@ -237,7 +238,7 @@ def _bound(
 def _context(
     fields: tuple[str, ...], base: Mapping[str, object], bound: Mapping[str, Any]
 ) -> dict[str, object]:
-    ctx: dict[str, object] = dict(base)
+    ctx: dict[str, object] = {**_bound_fields(), **base}
     for f in fields:
         if f in bound:
             ctx[f] = bound[f]
