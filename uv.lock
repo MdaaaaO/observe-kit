@@ -81,14 +81,14 @@ wheels = [
 
 [[package]]
 name = "conventional-release"
-version = "0.1.0"
+version = "0.1.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "git-cliff" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/92/df/38a9f4e204a6bfcdc3a08bbfec189e48cee9ff0711b6b8d078ce4f67f1d4/conventional_release-0.1.0.tar.gz", hash = "sha256:cdde7835e160a274f1fa98248688e855af180680ee0420d6b59541526d06a95a", size = 73098, upload-time = "2026-09-25T17:50:59.161Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1c/85/0798f69bd94b73ffdaaa144d052cb2f552ca1e6737597e9b0e48d98196b9/conventional_release-0.1.2.tar.gz", hash = "sha256:da9c511779193b7d04e9226b0e71bad1acca27f138c6a47736339ddc14be17db", size = 77304, upload-time = "2026-09-25T18:54:36.028Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/4a/bc/f15437cdf364fd5b24b512fedbb3a6a76c4f93efc9063787bf3da2aae585/conventional_release-0.1.0-py3-none-any.whl", hash = "sha256:d45b5a7498b2a4ce8d854b99117e6eaead65c5acccc960e30e2d1f7db63a32dd", size = 22994, upload-time = "2026-09-25T17:50:57.904Z" },
+    { url = "https://files.pythonhosted.org/packages/88/39/5fdd7899fe79031e35bc9381819cc5810e5e2ef42dace039d4c93032c091/conventional_release-0.1.2-py3-none-any.whl", hash = "sha256:40ca58c4ddbf3d2e97b6534b801c2e49d2e3e23550db7bbf8f1f0524047af54c", size = 23858, upload-time = "2026-09-25T18:54:34.788Z" },
 ]
 
 [[package]]
@@ -446,7 +446,7 @@ requires-dist = [{ name = "structlog", specifier = ">=24.1" }]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "conventional-release", specifier = ">=0.1,<0.2" },
+    { name = "conventional-release", specifier = ">=0.1.2,<0.2" },
     { name = "mypy", specifier = ">=1.11" },
     { name = "pytest", specifier = ">=8" },
     { name = "pytest-cov", specifier = ">=5" },
