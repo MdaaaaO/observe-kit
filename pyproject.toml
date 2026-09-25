@@ -1,6 +1,6 @@
 [project]
 name = "observe-kit"
-version = "0.1.1"
+version = "0.2.0"
 description = "@observed: one decorator that times a call, classifies how it ended, logs it and emits an event."
 readme = "README.md"
 license = "Apache-2.0"
