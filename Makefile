@@ -18,8 +18,9 @@ format:  ## Apply ruff fixes and formatting
 typecheck:  ## mypy --strict
 	uv run --locked mypy
 
-tests:  ## pytest with branch coverage
-	uv run --locked pytest --cov --cov-report=term-missing
+tests:  ## pytest with branch coverage (coverage starts first, so the pytest11 plugin's imports count)
+	uv run --locked coverage run -m pytest
+	uv run --locked coverage report
 
 ci: lint typecheck tests  ## Everything CI enforces
 	@echo "CI checks passed."
