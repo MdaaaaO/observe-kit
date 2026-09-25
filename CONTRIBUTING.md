@@ -22,7 +22,7 @@ Thanks for helping. The short version:
 An automated Claude review comments on each PR from this repo's branches, as inline threads plus
 one summary comment. Maintainers can ask it again after a fix push with `@claude review`. Release
 PRs and Dependabot are not reviewed. The `coverage` job adds a comment with the coverage of the
-lines the PR changes.
+lines the PR changes; PRs from forks get a read-only token, so there the job runs but cannot comment.
 
 The review is advisory, but its threads are not optional: a PR is merged only when every thread is
 answered and resolved (the `main` ruleset requires it). An answer is one of:
@@ -33,7 +33,8 @@ answered and resolved (the `main` ruleset requires it). An answer is one of:
    `review-followup` and cited in the reply. It is picked up first, right after the merge.
 3. **A disagreement, with the reason**, citing the commit or issue that makes it checkable.
 
-A finding is never parked without an issue number.
+A finding is never parked without an issue number. PRs are squash-merged only, and the branch is
+deleted on merge.
 
 ## Releasing (maintainers)
 
