@@ -89,3 +89,16 @@ def test_asyncio_tasks_are_isolated(sink: MemorySink) -> None:
     asyncio.run(main())
     contexts = sorted((e.context for e in sink.named("mod.awork")), key=lambda c: str(c["job"]))
     assert contexts == [{"run_id": 7, "job": 1}, {"run_id": 7, "job": 2}]
+
+
+def test_new_thread_needs_copy_context(sink: MemorySink) -> None:
+    import contextvars
+    import threading
+
+    with bind(run_id=7):
+        plain = threading.Thread(target=work, args=(1,))
+        copied = threading.Thread(target=contextvars.copy_context().run, args=(work, 2))
+        plain.start(), copied.start()
+        plain.join(), copied.join()
+    contexts = sorted((e.context for e in sink.named("mod.work")), key=lambda c: str(c["x"]))
+    assert contexts == [{"x": 1}, {"run_id": 7, "x": 2}]

@@ -3,9 +3,10 @@
     with observe_kit.bind(run_id=7, tenant="acme"):
         charge("c_42", 500)          # its log line and event carry run_id and tenant
 
-Backed by a ContextVar, so it follows the current thread and asyncio task: a task sees what was
-bound where it was created, and its own binds do not leak back. Nested blocks merge, the inner
-value wins, and each block restores what it found on exit.
+Backed by a ContextVar: it holds for the current thread, an asyncio task sees what was bound where
+it was created, and a task's own binds do not leak back. A new thread or thread-pool worker starts
+without it unless the work runs through `contextvars.copy_context().run(...)`. Nested blocks
+merge, the inner value wins, and each block restores what it found on exit.
 """
 
 from __future__ import annotations
