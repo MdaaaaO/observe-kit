@@ -57,6 +57,7 @@ addopts = "--strict-markers --strict-config"
 
 [tool.coverage.run]
 branch = true
+relative_files = true
 source = ["observe_kit"]
 
 [tool.coverage.report]
