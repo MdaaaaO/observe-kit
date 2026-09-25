@@ -1,8 +1,9 @@
 """Find the collaborators `observed` needs on the decorated method's instance, or default.
 
 Convention over wiring: if the object the method was called on has a `.log`, `.sink`,
-`.notifier` or `.observe_context` of the right shape, it is used. Otherwise a module logger, no
-sink, no notifier, no context. Plain functions always get the defaults.
+`.notifier` or `.observe_context` of the right shape, it is used. Otherwise the sink and notifier
+set with `configure()`, and failing those a module logger, no sink, no notifier, no context.
+Plain functions always get the defaults.
 """
 
 from __future__ import annotations
@@ -12,6 +13,7 @@ from typing import Any
 
 import structlog
 
+from .config import defaults
 from .sinks import EventSink, Notifier, NullSink
 
 
@@ -30,19 +32,22 @@ class Provider:
 
     @staticmethod
     def sink(args: tuple[Any, ...]) -> EventSink:
-        """The instance's `.sink` if it has an `emit` method, else a NullSink."""
+        """The instance's `.sink` if it has an `emit` method, else the configured sink, else a
+        NullSink."""
         sink = getattr(Provider._self(args), "sink", None)
         if sink is not None and callable(getattr(sink, "emit", None)):
             return sink  # type: ignore[no-any-return]
-        return NullSink()
+        configured = defaults().sink
+        return configured if configured is not None else NullSink()
 
     @staticmethod
     def notifier(args: tuple[Any, ...]) -> Notifier | None:
-        """The instance's `.notifier` if it has an `error` method, else None."""
+        """The instance's `.notifier` if it has an `error` method, else the configured notifier,
+        else None."""
         notifier = getattr(Provider._self(args), "notifier", None)
         if notifier is not None and callable(getattr(notifier, "error", None)):
             return notifier  # type: ignore[no-any-return]
-        return None
+        return defaults().notifier
 
     @staticmethod
     def context(args: tuple[Any, ...]) -> Mapping[str, object]:

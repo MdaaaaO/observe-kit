@@ -78,12 +78,26 @@ to a default when one is missing or has the wrong shape:
 | attribute | expected shape | fallback |
 |---|---|---|
 | `log` | a structlog logger (has `.bind`) | `structlog.get_logger(module)` |
-| `sink` | an `EventSink`: `emit(event)` | `NullSink`, which drops events |
-| `notifier` | a `Notifier`: `error(title, text)` | none; nobody is told |
+| `sink` | an `EventSink`: `emit(event)` | the `configure()`d sink, else `NullSink`, which drops events |
+| `notifier` | a `Notifier`: `error(title, text)` | the `configure()`d notifier, else none; nobody is told |
 | `observe_context` | a mapping, e.g. `{"run_id": 7}` | `{}` |
 
 `observe_context` is bound onto every log line and event from that instance. Plain functions get
 the fallbacks, so `@observed` on a module-level function just logs.
+
+To give every call a sink and a notifier without threading them through each instance, configure
+them once at start-up, next to your structlog configuration:
+
+```python
+import observe_kit
+
+observe_kit.configure(sink=CountingSink(counter), notifier=Pager(), notify_policy=POLICY)
+```
+
+The instance's own `sink` and `notifier` still win; the configured ones fill the gaps, including
+for plain functions. They are read on every call, so `configure` can run after the modules that
+decorate are imported. It returns the previous defaults; `observe_kit.restore(previous)` puts them
+back, which is what a test wants. An argument left out keeps its value, `None` clears it.
 
 ## Events and sinks
 
@@ -141,18 +155,19 @@ short text. Alerts end up in chat apps, phones and mailboxes, so the text is del
 - only the first line of the error travels; the lines after it are counted;
 - URLs in that line are replaced by `<url withheld>`.
 
-The default policy allows no fields. Set your own once and pass it where you decorate:
+The default policy allows no fields. Set your own once, for the whole process:
 
 ```python
-from functools import partial
-from observe_kit import NotifyPolicy, observed as _observed
+from observe_kit import NotifyPolicy, configure
 
 POLICY = NotifyPolicy(
     fields=frozenset({"run_id", "count", "duration_ms"}),
     withheld_hint="see logs/app.jsonl",
 )
-observed = partial(_observed, notify_policy=POLICY)
+configure(notify_policy=POLICY)
 ```
+
+`@observed(..., notify_policy=OTHER)` overrides it for one function.
 
 ```text
 billing.charge raised TimeoutError

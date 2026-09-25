@@ -8,6 +8,7 @@ from collections.abc import Awaitable, Callable, Mapping
 from functools import wraps
 from typing import Any, Literal, ParamSpec, TypeVar, cast
 
+from .config import defaults
 from .events import CallOutcome, ObservedEvent
 from .policy import DEFAULT_POLICY, NotifyPolicy
 from .provider import Provider
@@ -27,7 +28,7 @@ def observed(
     fields: tuple[str, ...] = (),
     detail: str | None = None,
     level: Literal["debug", "info"] = "info",
-    notify_policy: NotifyPolicy = DEFAULT_POLICY,
+    notify_policy: NotifyPolicy | None = None,
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
     """Time a call, classify how it ended, log it and emit an event, on every invocation.
 
@@ -44,7 +45,8 @@ def observed(
         detail: One argument name whose value, as a string, becomes the event's `detail`. It is
             not added to the context: it is for a later query to read back, not for every log line.
         level: Log level of the FINISHED outcome. "debug" for chatty inner calls.
-        notify_policy: What a RAISED notification may carry. The default allows no context
+        notify_policy: What a RAISED notification may carry. When not given, the policy set with
+            `configure()` applies, and failing that `DEFAULT_POLICY`, which allows no context
             fields; see `NotifyPolicy`.
 
     Anything that is an `Exception` and in neither tuple is RAISED: logged as an error with the
@@ -55,7 +57,8 @@ def observed(
     Works on plain and `async def` functions and methods. Generators are refused, because the
     call returns before the work happens and the timing would be meaningless.
 
-    Collaborators (logger, sink, notifier, context) come from the instance via `Provider`.
+    Collaborators (logger, sink, notifier, context) come from the instance via `Provider`, with
+    `configure()` supplying the sink and notifier an instance does not have.
     """
 
     def decorate(func: Callable[P, R]) -> Callable[P, R]:
@@ -138,7 +141,7 @@ class _Spec:
         fields: tuple[str, ...],
         detail: str | None,
         level: str,
-        policy: NotifyPolicy,
+        policy: NotifyPolicy | None,
         sig: inspect.Signature,
         module: str,
         qualname: str,
@@ -201,7 +204,7 @@ class _Call:
         if notifier is not None:
             notifier.error(
                 title=f"{spec.name} raised {type(exc).__name__}",
-                text=spec.policy.text(spec.qualname, ev.error, self.context),
+                text=_policy(spec).text(spec.qualname, ev.error, self.context),
             )
         return False
 
@@ -211,6 +214,14 @@ class _Call:
         duration_ms = round((time.perf_counter() - self.started) * 1000)
         error = f"{type(exc).__name__}: {exc}" if exc is not None else None
         return ObservedEvent(self.spec.name, outcome, duration_ms, error, self.context, self.detail)
+
+
+def _policy(spec: _Spec) -> NotifyPolicy:
+    """The decorator's policy, else the configured one, else DEFAULT_POLICY; read per call."""
+    if spec.policy is not None:
+        return spec.policy
+    configured = defaults().notify_policy
+    return configured if configured is not None else DEFAULT_POLICY
 
 
 def _bound(
