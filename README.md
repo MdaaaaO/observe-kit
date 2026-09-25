@@ -85,6 +85,22 @@ to a default when one is missing or has the wrong shape:
 `observe_context` is bound onto every log line and event from that instance. Plain functions get
 the fallbacks, so `@observed` on a module-level function just logs.
 
+For fields that belong to a unit of work rather than an object, such as a request id or a run id,
+bind them around the block:
+
+```python
+from observe_kit import bind
+
+with bind(run_id=run.id, tenant=tenant):
+    sync_accounts()  # every @observed call inside carries run_id and tenant
+```
+
+`bind` is backed by a `ContextVar`: it holds for the current thread, and an asyncio task sees what
+was bound where it was created. A new thread or thread-pool worker starts without it; run the work
+through `contextvars.copy_context().run(...)` to carry it over. Nested blocks merge, the inner
+value wins, and each block restores what it found. On a clash, the instance's
+`observe_context` beats `bind`, and the decorator's `fields=` beats both.
+
 To give every call a sink and a notifier without threading them through each instance, configure
 them once at start-up, next to your structlog configuration:
 
