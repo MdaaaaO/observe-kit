@@ -81,14 +81,14 @@ wheels = [
 
 [[package]]
 name = "conventional-release"
-version = "0.1.2"
+version = "0.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "git-cliff" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1c/85/0798f69bd94b73ffdaaa144d052cb2f552ca1e6737597e9b0e48d98196b9/conventional_release-0.1.2.tar.gz", hash = "sha256:da9c511779193b7d04e9226b0e71bad1acca27f138c6a47736339ddc14be17db", size = 77304, upload-time = "2026-09-25T18:54:36.028Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/57/88/d0ab1fa4f696f41ecaeaa4945997cf344508474801bdc3702dda96b5f999/conventional_release-0.3.1.tar.gz", hash = "sha256:37e351ceee400244090c01e08878b2990c723d55a14f86843ef9bc12d7ab5061", size = 83927, upload-time = "2026-09-25T21:35:38.865Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/88/39/5fdd7899fe79031e35bc9381819cc5810e5e2ef42dace039d4c93032c091/conventional_release-0.1.2-py3-none-any.whl", hash = "sha256:40ca58c4ddbf3d2e97b6534b801c2e49d2e3e23550db7bbf8f1f0524047af54c", size = 23858, upload-time = "2026-09-25T18:54:34.788Z" },
+    { url = "https://files.pythonhosted.org/packages/81/c4/1a742941d290f3538fb970dd4cd6804a9634e8ded167c584e2e34cb68a0f/conventional_release-0.3.1-py3-none-any.whl", hash = "sha256:cb6dffeb9ecf8610970f94939254b4ebd91e78ab37b5f37f4b62b833bdf7ca74", size = 27584, upload-time = "2026-09-25T21:35:37.757Z" },
 ]
 
 [[package]]
